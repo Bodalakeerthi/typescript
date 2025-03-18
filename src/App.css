@@ -1,78 +1,118 @@
-import React, { useState, useEffect } from "react";
-import "./App.css"; // Import the CSS file
-
-interface Item {
-  id: number;
-  name: string;
+/* Reset styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
 }
 
-const LOCAL_STORAGE_KEY = "todo_items";
+/* Center the app */
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(to right, #ff9a9e, #fad0c4);
+  padding: 20px;
+}
 
-const App: React.FC = () => {
-  const [items, setItems] = useState<Item[]>([]);
-  const [newItem, setNewItem] = useState("");
-  const [editId, setEditId] = useState<number | null>(null);
+/* Main container */
+.container {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
 
-  useEffect(() => {
-    const savedItems = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (savedItems) {
-      setItems(JSON.parse(savedItems));
-    }
-  }, []);
+/* Title */
+h2 {
+  color: #333;
+  margin-bottom: 15px;
+}
 
-  useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(items));
-  }, [items]);
+/* Input field */
+input {
+  width: 70%;
+  padding: 10px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  transition: all 0.3s ease-in-out;
+  outline: none;
+}
 
-  const addItem = () => {
-    if (newItem.trim()) {
-      if (editId !== null) {
-        setItems(items.map((item) => (item.id === editId ? { ...item, name: newItem } : item)));
-        setEditId(null);
-      } else {
-        setItems([...items, { id: Date.now(), name: newItem }]);
-      }
-      setNewItem("");
-    }
-  };
+input:focus {
+  border-color: #ff758c;
+}
 
-  const editItem = (id: number) => {
-    const itemToEdit = items.find((item) => item.id === id);
-    if (itemToEdit) {
-      setNewItem(itemToEdit.name);
-      setEditId(id);
-    }
-  };
+/* Buttons */
+button {
+  padding: 10px 15px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
 
-  const deleteItem = (id: number) => {
-    setItems(items.filter((item) => item.id !== id));
-  };
+button:hover {
+  transform: scale(1.05);
+}
 
-  return (
-    <div className="container">
-      <h2>React + TypeScript Todo App</h2>
-      <input
-        type="text"
-        value={newItem}
-        onChange={(e) => setNewItem(e.target.value)}
-        placeholder="Enter item"
-      />
-      <button className="add-btn" onClick={addItem}>
-        {editId !== null ? "Update" : "Add"}
-      </button>
-      <ul>
-        {items.map((item) => (
-          <li key={item.id}>
-            {item.name}
-            <div>
-              <button className="list-btn edit-btn" onClick={() => editItem(item.id)}>✏️</button>
-              <button className="list-btn delete-btn" onClick={() => deleteItem(item.id)}>❌</button>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-};
+/* Add Button */
+.add-btn {
+  background: #ff758c;
+  color: white;
+  margin-left: 8px;
+}
 
-export default App;
+.add-btn:hover {
+  background: #e05268;
+}
+
+/* List container */
+ul {
+  list-style: none;
+  margin-top: 15px;
+  padding: 0;
+}
+
+/* List items */
+li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  padding:7px;
+  border-radius: 6px;
+  margin: 16px;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Buttons inside list */
+.list-btn {
+  margin-left: 5px;
+  padding: 5px 8px;
+  font-size: 14px;
+  border-radius: 5px;
+}
+
+.edit-btn {
+  background: #ffcc00;
+  color: #333;
+}
+
+
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .container {
+    width: 90%;
+  }
+
+  input {
+    width: 65%;
+  }
+}
